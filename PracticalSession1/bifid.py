@@ -14,7 +14,7 @@ def getItemFromTableau(i, j, tableau):
 	return tableau[i][j]
 
 # This function encrypts a message using the Bifid algorithm
-# It receibes de clear message and a tableau
+# It receives de clear message and a tableau
 def encrypt(message, tableau):
 	li, lj = [], []
 
