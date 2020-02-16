@@ -10,14 +10,14 @@ def initialPermutation(plaintext):
 	return ("").join([b[1], b[5], b[2], b[0], b[3], b[7], b[4], b[6]])
 
 def inversePermutation(finaltext):
-	# Changes the order of the result obtained after two rounds
+	# Changes the order of the obtained result after two rounds
 	# This permutation can be expressed as (3,0,2,4,6,1,7,5)
 	b = finaltext
 	return ("").join([b[3], b[0], b[2], b[4], b[6], b[1], b[7], b[5]])
 
 def subkeys(key):
 	# Simplified DES uses a 10-bit key
-	# Obtaines two 8-bit subkeys for each round with the following permutations
+	# Obtains two 8-bit subkeys for each round with the following permutations
 	# k1 = (0,6,8,3,7,2,9,5)
 	# k2 = (7,2,5,4,9,1,8,0) 
 	k = key
