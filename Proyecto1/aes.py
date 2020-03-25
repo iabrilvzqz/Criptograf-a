@@ -3,6 +3,7 @@ import csv
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 from Crypto.Util.Padding import unpad
+from Crypto.Random import get_random_bytes
 
 def AES_ECB(key, data):
 	times = []
@@ -13,14 +14,12 @@ def AES_ECB(key, data):
 	ct = cipher.encrypt(pad(data, AES.block_size))
 	end = time.clock()
 
-	print(ct.hex())
 	times.append(end-start)
 
 	start = time.clock()
 	pt = unpad(cipher.decrypt(ct), AES.block_size)
 	end = time.clock()
 
-	print(pt)
 	times.append(end-start)
 
 	return times
@@ -36,7 +35,6 @@ def  AES_CBC(key, data):
 	ct = cipher.encrypt(pad(data, AES.block_size))
 	end = time.clock()
 
-	print(ct.hex())
 	times.append(end-start)
 
 	decipher = AES.new(key, AES.MODE_CBC, cipher.iv)
@@ -45,12 +43,11 @@ def  AES_CBC(key, data):
 	pt = unpad(decipher.decrypt(ct), AES.block_size)
 	end = time.clock()
 
-	print(pt)
 	times.append(end-start)
 
 	return times
 
-with open("messages.txt", 'r') as file, open("timesAES.csv", "w") as results:
+with open("tests.txt", 'r') as file, open("timesAES.csv", "w") as results:
 	
 	writer = csv.writer(results, quoting=csv.QUOTE_ALL)
 	writer.writerow(["AES-EBC E", "AES-EBC D", "AES-CBC E", "AES-CBC D"])
@@ -60,12 +57,10 @@ with open("messages.txt", 'r') as file, open("timesAES.csv", "w") as results:
 		line = line.replace("\"\"", "").replace("\n", "")
 
 		data = bytes(line, "utf-8")		
-		key = bytes("0123456789ABCDEFGHIJKLMNOPQRSTUV", "utf-8")
+		key = get_random_bytes(32)
 
-		print("\nAES ECB")
 		tebc = AES_ECB(key, data)
 
-		print("AES CBC")
 		tcbc = AES_CBC(key, data)
 
 		writer.writerow(tebc + tcbc)
