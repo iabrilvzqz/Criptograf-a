@@ -91,7 +91,7 @@ def ECDSA_521(data):
 with open('rca_pdd_dsa_ecdsa_test_vectors.csv') as testVectors, open('times_RCA_PDD_DSA_ECDSA.csv', 'w') as results:
     reader = csv.reader(testVectors, delimiter = ",")
     writer = csv.writer(results, quoting=csv.QUOTE_ALL)
-    writer.writerow(['RSA PSS signing', 'RSA PSS verifing','DSA signing', 'DSA verifing', 'ECDSA signing', 'ECDSA verifing'])
+    writer.writerow(['DSA signing', 'DSA verifing','ECDSA signing', 'ECDSA verifing', 'RSA PSS signing', 'RSA PSS verifing'])
 
     for row in reader:
         n = int(row[1], 16)
