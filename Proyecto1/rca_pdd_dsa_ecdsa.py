@@ -1,8 +1,38 @@
 import time
 import csv
-from Cryptodome.PublicKey import ECC, DSA
-from Cryptodome.Signature import DSS
-from Cryptodome.Hash import SHA512
+from Crypto.Signature import pss
+from Crypto.PublicKey import ECC, DSA, RSA
+from Crypto.Signature import DSS
+from Crypto.Hash import SHA512, SHA256
+
+def RSA_PSS(data, n, e, d):
+
+    privateKeyRCA = RSA.construct((n, e, d))
+    publicKeyRCA = privateKeyRCA.publickey()
+
+    times = []
+    hashValue = SHA256.new(data)
+
+    signFunction = pss.new(privateKeyRCA)
+    start = time.clock()
+    signature = signFunction.sign(hashValue)
+    end = time.clock()
+
+    print(signature.hex())
+    times.append(end - start)
+
+    verifier = pss.new(publicKeyRCA)
+    try:
+        start = time.clock()
+        verifier.verify(hashValue, signature)
+        end = time.clock()
+        print("The signature is authentic.")
+    except (ValueError, TypeError):
+        print("The signature is not authentic.")
+
+    times.append(end - start)
+
+    return times
 
 def DSA_1024(data):
     times = []
@@ -58,15 +88,19 @@ def ECDSA_521(data):
 
     return times
 
-with open('messages2.txt', 'r') as file, open('timesDSA_ECDSA.csv', 'w') as results:
+with open('messages2.csv') as testVectors, open('times_RCA_PDD_DSA_ECDSA.csv', 'w') as results:
+    reader = csv.reader(testVectors, delimiter = ",")
     writer = csv.writer(results, quoting=csv.QUOTE_ALL)
-    writer.writerow(['DSA signing', 'DSA verifing', 'ECDSA signing', 'ECDSA verifing'])
+    writer.writerow(['DSA signing', 'DSA verifing','DSA signing', 'DSA verifing', 'ECDSA signing', 'ECDSA verifing'])
 
-    for line in file:
+    for row in reader:
+        n = int(row[1], 16)
+        e = int(row[2], 16)
+        d = int(row[3], 16)
+        data =  bytes.fromhex(row[0])
 
-        line = line.replace('"','').replace('\n','')
-
-        data = bytes.fromhex(line)
+        print('\nRSA PSS')
+        time_rsa_pss = RSA_PSS(data, n, e, d)
 
         print('\nDSA')
         time_dsa = DSA_1024(data)
@@ -74,4 +108,4 @@ with open('messages2.txt', 'r') as file, open('timesDSA_ECDSA.csv', 'w') as resu
         print('\nECDSA')
         time_ecdsa = ECDSA_521(data)
 
-        writer.writerow(time_dsa + time_ecdsa)
+        writer.writerow(time_dsa + time_ecdsa + time_rsa_pss)
