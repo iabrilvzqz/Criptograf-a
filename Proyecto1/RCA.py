@@ -16,15 +16,6 @@ def createRCAkeys(n, e, d):
     privateKey = RSA.construct((n, e, d))
     publicKey = privateKey.publickey()
 
-    f = open('publicKey.pem','wb')
-    f.write(publicKey.exportKey('PEM'))
-    f.close()
-
-    f = open('privateKey.pem','wb')
-    f.write(privateKey.exportKey('PEM'))
-    f.close()
-
-
 def RSA_PSS(data):
     hashValue = SHA256.new(data)
 
