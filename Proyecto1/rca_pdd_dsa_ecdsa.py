@@ -88,7 +88,7 @@ def ECDSA_521(data):
 
     return times
 
-with open('messages2.csv') as testVectors, open('times_RCA_PDD_DSA_ECDSA.csv', 'w') as results:
+with open('rca_pdd_dsa_ecdsa_test_vectors.csv') as testVectors, open('times_RCA_PDD_DSA_ECDSA.csv', 'w') as results:
     reader = csv.reader(testVectors, delimiter = ",")
     writer = csv.writer(results, quoting=csv.QUOTE_ALL)
     writer.writerow(['DSA signing', 'DSA verifing','DSA signing', 'DSA verifing', 'ECDSA signing', 'ECDSA verifing'])
