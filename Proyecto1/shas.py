@@ -2,7 +2,7 @@ import hashlib
 import time
 import csv
 
-with open("messages.txt", 'r') as file, open("timesSHA.csv", "w") as results:
+with open("shaTestVectors.txt", 'r') as file, open("timesSHA.csv", "w") as results:
 	
 	writer = csv.writer(results, quoting=csv.QUOTE_ALL)
 	writer.writerow(["SHA-1", "SHA-2", "SHA-3"])

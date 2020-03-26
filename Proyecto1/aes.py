@@ -47,7 +47,7 @@ def  AES_CBC(key, data):
 
 	return times
 
-with open("tests.txt", 'r') as file, open("timesAES.csv", "w") as results:
+with open("aesTestVectors.csv", 'r') as file, open("timesAES.csv", "w") as results:
 	
 	writer = csv.writer(results, quoting=csv.QUOTE_ALL)
 	writer.writerow(["AES-EBC E", "AES-EBC D", "AES-CBC E", "AES-CBC D"])

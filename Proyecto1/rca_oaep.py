@@ -35,7 +35,7 @@ def RSA_OAEP(data, n, e, d):
 with open("rca_oaep_test_vectors.csv") as testVectors, open('times_RCA_OAEP.csv', 'w') as results:
     reader = csv.reader(testVectors, delimiter = ",")
     writer = csv.writer(results, quoting=csv.QUOTE_ALL)
-    writer.writerow(['DSA encrypting', 'DSA desencryting'])
+    writer.writerow(['RSA OAEP encrypting', 'RSA OAEP desencryting'])
     for row in reader:
         n = int(row[0], 16)
         e = int(row[1], 16)
