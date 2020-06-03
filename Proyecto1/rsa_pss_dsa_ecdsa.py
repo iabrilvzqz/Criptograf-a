@@ -7,13 +7,13 @@ from Crypto.Hash import SHA512, SHA256
 
 def RSA_PSS(data, n, e, d):
 
-    privateKeyRCA = RSA.construct((n, e, d))
-    publicKeyRCA = privateKeyRCA.publickey()
+    privateKeyRSA = RSA.construct((n, e, d))
+    publicKeyRSA = privateKeyRSA.publickey()
 
     times = []
     hashValue = SHA256.new(data)
 
-    signFunction = pss.new(privateKeyRCA)
+    signFunction = pss.new(privateKeyRSA)
     start = time.clock()
     signature = signFunction.sign(hashValue)
     end = time.clock()
@@ -21,7 +21,7 @@ def RSA_PSS(data, n, e, d):
     print(signature.hex())
     times.append(end - start)
 
-    verifier = pss.new(publicKeyRCA)
+    verifier = pss.new(publicKeyRSA)
     try:
         start = time.clock()
         verifier.verify(hashValue, signature)
@@ -88,7 +88,7 @@ def ECDSA_521(data):
 
     return times
 
-with open('rca_pdd_dsa_ecdsa_test_vectors.csv') as testVectors, open('times_RCA_PDD_DSA_ECDSA.csv', 'w') as results:
+with open('rsa_pss_dsa_ecdsa_test_vectors.csv') as testVectors, open('times_RSA_PSS_DSA_ECDSA.csv', 'w') as results:
     reader = csv.reader(testVectors, delimiter = ",")
     writer = csv.writer(results, quoting=csv.QUOTE_ALL)
     writer.writerow(['DSA signing', 'DSA verifing','ECDSA signing', 'ECDSA verifing', 'RSA PSS signing', 'RSA PSS verifing'])
