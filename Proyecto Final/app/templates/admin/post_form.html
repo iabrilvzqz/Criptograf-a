@@ -1,0 +1,28 @@
+{% extends "base_template.html" %}
+{% block title %}
+        Nueva venta
+{% endblock %}
+{% block content %}
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.total.label }}
+            {{ form.total(size=128) }}<br>
+            {% for error in form.total.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </div>
+        
+        <div>
+            {{ form.content.label }}
+            {{ form.content }}<br>
+            {% for error in form.content.errors %}
+            <span style="color: red;">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.submit() }}
+        </div>
+
+    </form>
+{% endblock %}

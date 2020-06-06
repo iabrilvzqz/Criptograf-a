@@ -144,13 +144,12 @@ blockchain.create_genesis_block()
 # the address to other participating members of the network
 peers = set()
 
-
 # endpoint to submit a new transaction. This will be used by
 # our application to add new data (posts) to the blockchain
 @app.route('/new_transaction', methods=['POST'])
 def new_transaction():
     tx_data = request.get_json()
-    required_fields = ["author", "content"]
+    required_fields = ["author", "content", "total"]
 
     for field in required_fields:
         if not tx_data.get(field):
@@ -238,7 +237,6 @@ def register_with_existing_node():
     else:
         # if something goes wrong, pass it on to the API response
         return response.content, response.status_code
-
 
 def create_chain_from_dump(chain_dump):
     generated_blockchain = Blockchain()
