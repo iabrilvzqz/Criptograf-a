@@ -162,6 +162,22 @@ def new_transaction():
     return "Success", 201
 
 
+@app.route('/new_transaction_', methods=['POST'])
+def new_transaction_():
+    tx_data = request.get_json()
+    required_fields = ["author", "count", "products", "total"]
+
+    for field in required_fields:
+        if not tx_data.get(field):
+            return "Invalid transaction data", 404
+
+    tx_data["timestamp"] = time.time()
+
+    print(tx_data)
+    blockchain.add_new_transaction(tx_data)
+
+    return "Success", 201
+
 # endpoint to return the node's copy of the chain.
 # Our application will be using this endpoint to query
 # all the posts to display.
