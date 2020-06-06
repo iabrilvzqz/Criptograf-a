@@ -1,0 +1,12 @@
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.product-form {
+    padding: 5% 15%;
+}
+
+.product-form label {
+    font-weight: 700;
+    font-size: 1.2rem;
+}

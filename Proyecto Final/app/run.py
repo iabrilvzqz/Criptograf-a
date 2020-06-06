@@ -1,10 +1,10 @@
 # export FLASK_APP=node_server.py
 # flask run --port 8000
 # export FLASK_APP=run.py
-# flask run 
+# flask run
 
 from flask import Flask
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, jsonify
 from forms import SignupForm, PostForm,LoginForm
 from werkzeug.urls import url_parse
 from models import User
@@ -56,16 +56,16 @@ def index():
 @app.route('/admin/post/', methods=["GET", "POST"])
 @login_required
 def post_form():
-    form = PostForm()	
-    
+    form = PostForm()
+
     global numposts
-   
+
     if form.validate_on_submit():
         total = form.total.data
         content = form.content.data
 
         post_object = {"author": current_user.name, "content": content, "total": total}
-        
+
         numposts += 1
 
         new_tx_address = "{}/new_transaction".format(CONNECTED_NODE_ADDRESS)
@@ -78,13 +78,32 @@ def post_form():
         if numposts == 3:
 
             mine = "{}/mine".format(CONNECTED_NODE_ADDRESS)
-            numposts = 0 
+            numposts = 0
             requests.get(mine)
 
         return redirect(url_for('post_form'))
 
     return render_template('admin/post_form.html', form = form)
-    
+
+@app.route('/admin/postShopping', methods=["POST"])
+@login_required
+def postShopping():
+
+    new_tx_address = "{}/new_transaction_".format(CONNECTED_NODE_ADDRESS)
+
+    response = requests.post(new_tx_address,
+                  json=request.get_json(),
+                  headers={'Content-type': 'application/json'})
+
+    if response.status_code == 201:
+        return jsonify({
+            "status": 201
+        })
+
+    return jsonify({
+        "status": 400
+    })
+
 @app.route('/admin/lectura/', methods=["GET", "POST"])
 @login_required
 def post_read():
@@ -93,7 +112,7 @@ def post_read():
 
     if current_user.is_admin:
         return render_template('admin/post_read.html', title = 'Ventas realizadas', posts = posts, node_address=CONNECTED_NODE_ADDRESS, readable_time=timestamp_to_string)
-    
+
     return redirect(url_for('index'))
 
 # Flask responde por defecto ante peticiones GET. Si se quiere responder otro tipo de petición, se debe indicar con el parámetro methods
@@ -103,12 +122,12 @@ def show_signup_form():
         return redirect(url_for('index'))
 
     form = SignupForm()
-    
+
     if form.validate_on_submit():
         name = form.name.data
         email = form.email.data
         password = form.password.data
-        
+
         # Creamos el usuario y lo guardamos
         user_id = int(hashlib.md5(email.encode()).hexdigest()[:8], 16)
 
@@ -116,15 +135,15 @@ def show_signup_form():
 
         # Guardar en la base de datos los datos del usuario
         user.register(user)
-        
+
         # Dejamos al usuario logueado
         login_user(user, remember=True)
-        
+
         next_page = request.args.get('next', None)
-        
+
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
-        
+
         return redirect(next_page)
     return render_template("signup_form.html", form=form)
 
@@ -132,30 +151,34 @@ def show_signup_form():
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
-    
+
     form = LoginForm()
-    
+
     if form.validate_on_submit():
-        
+
         userInfo = User.get_by_email(form.email.data, form.password.data)
-        
+
         if userInfo is not None:
-            
+
             user = User(userInfo.get('user_id'), userInfo.get('name'), userInfo.get('email'), userInfo.get('password'), userInfo.get('is_admin'))
             user.set_object(user)
 
             login_user(user, remember=form.remember_me.data)
-            
+
             next_page = request.args.get('next')
-            
+
             if not next_page or url_parse(next_page).netloc != '':
                 next_page = url_for('index')
-            
+
             return redirect(next_page)
     return render_template('login_form.html', form=form)
 
 @app.route('/logout')
 def logout():
+
+    mine = "{}/mine".format(CONNECTED_NODE_ADDRESS)
+    requests.get(mine)
+
     logout_user()
     return redirect(url_for('index'))
 
@@ -165,4 +188,6 @@ def load_user(user_id):
 
 def timestamp_to_string(epoch_time):
     return datetime.datetime.fromtimestamp(epoch_time).strftime('%H:%M')
- 
+
+
+app.run(debug=True)
