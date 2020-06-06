@@ -1,3 +1,5 @@
+@import url("https://cdn.jsdelivr.net/npm/hack-font@3/build/web/hack.css");
+
 * {
     box-sizing: border-box;
 }
@@ -8,7 +10,6 @@
 
 body {
     font-family: Arial;
-    background-color: #3498DB;
     margin: 0;
     padding: 50px;
     font-size: 100%;
@@ -53,12 +54,34 @@ sup, sub {
     padding: 0 10px 0 0;
 }
 
-.header{
-    background-color: #f6cef5;
-    padding: 0.5em;
-
-    font-family: 'Arial', Arial, monospace;
-    font-size: 0.7em;
-    font-weight: 500;
+.logo-header{
+    display: block;
     text-align: center;
+}
+
+#menu{
+    margin: 25px;
+    background: #f9f9f9;
+    padding: 16px;
+}
+
+#menu li{
+    display: inline;
+}
+
+#menu li a{
+    font-family: Hack, monospace;
+    font-size: 14px;
+    font-weight: 600;
+    position: relative;
+    text-decoration: none;
+    float: left;
+    padding: 10px;
+    background-color: #2175bc;
+    color: #fff;
+}
+
+#menu li a:hover{
+    background-color: #cbecfc;
+    color: white;
 }

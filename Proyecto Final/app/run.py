@@ -74,13 +74,6 @@ def post_form():
                   json=post_object,
                   headers={'Content-type': 'application/json'})
 
-        # Ahorita mina cada que hay 3 bloques en espera
-        if numposts == 3:
-
-            mine = "{}/mine".format(CONNECTED_NODE_ADDRESS)
-            numposts = 0
-            requests.get(mine)
-
         return redirect(url_for('post_form'))
 
     return render_template('admin/post_form.html', form = form)
