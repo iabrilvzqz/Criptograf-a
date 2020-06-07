@@ -16,6 +16,15 @@ body {
     line-height: 1.5
 }
 
+.section {
+	margin: 2rem 0 2rem 0;
+}
+
+.container {
+	margin: 0 auto 0 auto;
+	max-width: 60rem;
+}
+
 h1, h2, h3, h4 {
     margin: 1em 0 .5em;
     line-height: 1.25
@@ -141,4 +150,36 @@ input:focus {
 #menu li a:hover{
     background-color: #cbecfc;
     color: white;
+}
+
+
+/**** SALES  ****/
+
+.container h1 {
+    font-family: Hack, monospace;
+    color: #2175bc;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 2rem 0 1rem;
+    padding: 1rem 0 0 0;
+}
+
+.post_box {
+    padding: 0 1rem 1rem 1rem;
+}
+
+.name-header {
+    font-family: Hack, monospace;
+    background-color: #e5e5e5;
+    padding: 5px;
+}
+
+.post_box-subtitle, .post_box-body p {
+    font-family: Hack, monospace;
+    font-weight: 400;
+    padding: 0 5px;
+}
+
+#total {
+    font-weight: 700;
 }

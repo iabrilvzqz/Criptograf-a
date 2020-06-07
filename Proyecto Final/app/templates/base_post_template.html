@@ -31,13 +31,13 @@
                 <li><a href="{{ url_for('login') }}">Login</a></li>
                 <li><a href="{{ url_for('show_signup_form') }}">Registrar</a></li>
             {% else %}
-                <li><a href="{{ url_for('post_form') }}">Nueva venta</a></li>
+                <li><a href="{{ url_for('post_form') }}">New Sale</a></li>
                 
                 {% if current_user.is_admin%}
-                    <li><a href="{{ url_for('post_read') }}">Ver ventas</a></li>
+                    <li><a href="{{ url_for('post_read') }}">Go to Sales</a></li>
                 {% endif%}
                 
-                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                <li><a href="{{ url_for('logout') }}">Sign out</a></li>
                 <li><a> {{ current_user.name }} </a></li>
 
             {% endif %}
