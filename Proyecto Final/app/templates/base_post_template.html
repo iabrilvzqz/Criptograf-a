@@ -22,21 +22,21 @@
     <div class="logo-header">
         <img src="{{ url_for("static", filename="logo.png")}}" alt="Logo">
     </div>
-	
+
     <div class="back">
         <ul id="menu">
             <li><a href="{{ url_for('index') }}">Home</a></li>
-            
+
             {% if current_user.is_anonymous %}
                 <li><a href="{{ url_for('login') }}">Login</a></li>
-                <li><a href="{{ url_for('show_signup_form') }}">Registrar</a></li>
-            {% else %}
+                {% else %}
                 <li><a href="{{ url_for('post_form') }}">New Sale</a></li>
-                
+
                 {% if current_user.is_admin%}
-                    <li><a href="{{ url_for('post_read') }}">Go to Sales</a></li>
+                <li><a href="{{ url_for('post_read') }}">Go to Sales</a></li>
+                    <li><a href="{{ url_for('show_signup_form') }}">Sign up new Seller</a></li>
                 {% endif%}
-                
+
                 <li><a href="{{ url_for('logout') }}">Sign out</a></li>
                 <li><a> {{ current_user.name }} </a></li>
 

@@ -111,7 +111,7 @@ def post_read():
 # Flask responde por defecto ante peticiones GET. Si se quiere responder otro tipo de petición, se debe indicar con el parámetro methods
 @app.route("/signup/", methods=["GET", "POST"])
 def show_signup_form():
-    if current_user.is_authenticated:
+    if not current_user.is_admin:
         return redirect(url_for('index'))
 
     form = SignupForm()
