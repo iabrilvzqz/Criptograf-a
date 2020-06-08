@@ -1,6 +1,7 @@
 from hashlib import sha256
 import json
 import time
+import pymongo
 
 from flask import Flask, request
 import requests
@@ -39,6 +40,21 @@ class Blockchain:
         genesis_block = Block(0, [], 0, "0")
         genesis_block.hash = genesis_block.compute_hash()
         self.chain.append(genesis_block)
+
+    def get_chain_from_db(self, db):
+        """
+        A function to get blocks from a database.
+        """
+        if db.blockchain.count_documents({}) == 0:
+            return False
+        
+        blocks = db.blockchain.find()
+        
+        for block in blocks:
+            temp = Block(index = block['index'], transactions = block['transactions'], timestamp = block['timestamp'], previous_hash = block['previous_hash'], nonce = block['nonce'])
+            temp.hash = block['hash']
+            self.chain.append(temp)
+        return True
 
     @property
     def last_block(self):
@@ -137,9 +153,14 @@ class Blockchain:
 
 app = Flask(__name__)
 
+client = pymongo.MongoClient(
+    'mongodb+srv://betote:6hBzndMr3RLsBDFx@cluster0-3vp2d.mongodb.net/test?retryWrites=true&w=majority&ssl_cert_reqs=CERT_NONE')
+db = client.test
+
 # the node's copy of blockchain
 blockchain = Blockchain()
-blockchain.create_genesis_block()
+if not blockchain.get_chain_from_db(db):
+    blockchain.create_genesis_block()
 
 # the address to other participating members of the network
 peers = set()
