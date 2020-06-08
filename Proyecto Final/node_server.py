@@ -227,6 +227,9 @@ def mine_unconfirmed_transactions():
         if chain_length == len(blockchain.chain):
             # announce the recently mined block to the network
             announce_new_block(blockchain.last_block)
+            blockToJSON = json.dumps(blockchain.last_block.__dict__)
+            blockToJSON = json.loads(blockToJSON)
+            db.blockchain.insert_one(blockToJSON)
         return "Block #{} is mined.".format(blockchain.last_block.index)
 
 
