@@ -18,10 +18,10 @@ class User(UserMixin):
 
         # Para guardar el objeto durante la sesión
         self.objectID = objectID
-    
+
     def set_password(self, password):
         self.password = generate_password_hash(password)
-    
+
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
@@ -38,7 +38,7 @@ class User(UserMixin):
     def register(self, user):
         userToJSON = json.dumps(user.__dict__)
         db.userBlockChain.insert_one({'user_id': self.id, 'name':self.name, 'email': self.email, 'password': self.password, 'is_admin':self.is_admin, 'objectID': userToJSON})
-    
+
     def __repr__(self):
         return '<User {}>'.format(self.email)
 
@@ -67,3 +67,20 @@ class User(UserMixin):
                 return userInfo
 
         return None
+
+    @staticmethod
+    def getUsers():
+        users = db.userBlockChain.find({"$or": [{"is_admin": 0}, {"is_admin": False}]}, {"email":1, "name":1})
+        accounts = []
+        for user in users:
+            del user["_id"]
+            accounts.append(user)
+        return accounts
+
+    @staticmethod
+    def deleteUser(email):
+        user = db.userBlockChain.find({"email":email})
+        if user.count() == 0:
+            return False
+        db.userBlockChain.delete_one({"email":email})
+        return True

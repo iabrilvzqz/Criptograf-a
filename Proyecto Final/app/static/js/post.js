@@ -44,7 +44,7 @@ function validateForm() {
         Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'No se ha ingresado ningún producto'
+            text: 'No Product has been given'
         });
 
         return false;
@@ -60,7 +60,7 @@ function validateForm() {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'No se ha ingresado el producto'
+                text: 'Please enter product\'s name'
             });
             return false;
         }
@@ -71,7 +71,7 @@ function validateForm() {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'No se ha ingresado el precio'
+                text: 'Please enter product\'s price'
             });
             return false;
         }
@@ -140,7 +140,7 @@ products.addEventListener("submit", e => {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'No se ha ingresado el precio'
+                    text: 'Sale wans\'t correctly registered'
                 });
 
                 return;
@@ -150,8 +150,8 @@ products.addEventListener("submit", e => {
 
             Swal.fire({
                 icon: 'success',
-                title: 'Compra Registrada',
-                text: 'Compra Registrada en el Blockchain correctamente'
+                title: 'Successful Sale',
+                text: 'Sale was correctly registered'
             });
 
         })

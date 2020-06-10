@@ -23,6 +23,7 @@
 	            {% if current_user.is_admin%}
 				<li><a href="{{ url_for('post_read') }}">Go to Sales</a></li>
 				<li><a href="{{ url_for('show_signup_form') }}">Sign up new Seller</a></li>
+                <li><a href="{{ url_for('deleteUser') }}">Delete Seller</a></li>
 	            {% endif%}
 
 	            <li><a href="{{ url_for('logout') }}">Sign out</a></li>

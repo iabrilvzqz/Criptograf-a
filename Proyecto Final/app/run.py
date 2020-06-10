@@ -130,7 +130,7 @@ def show_signup_form():
         user.register(user)
 
         # Dejamos al usuario logueado
-        login_user(user, remember=True)
+        # login_user(user, remember=True)
 
         next_page = request.args.get('next', None)
 
@@ -139,6 +139,28 @@ def show_signup_form():
 
         return redirect(next_page)
     return render_template("signup_form.html", form=form)
+
+
+@app.route("/admin/deleteUser", methods=["GET"])
+def deleteUser():
+    if not current_user.is_admin:
+        return redirect(url_for('index'))
+
+    return render_template("admin/delete_user.html")
+
+@app.route("/getSellers", methods=["GET"])
+def getSellers():
+    return jsonify({
+        "users": User.getUsers()
+    })
+
+@app.route("/deleteAuser", methods=["POST"])
+def deleteAuser():
+    content = request.get_json()
+
+    if not User.deleteUser(content["email"]):
+        return "Error", 400
+    return "User Deleted", 200
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
