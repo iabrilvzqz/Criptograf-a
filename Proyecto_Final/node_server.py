@@ -6,7 +6,6 @@ import pymongo
 from flask import Flask, request
 import requests
 
-
 class Block:
     def __init__(self, index, transactions, timestamp, previous_hash, nonce=0):
         self.index = index
@@ -47,9 +46,9 @@ class Blockchain:
         """
         if db.blockchain.count_documents({}) == 0:
             return False
-        
+
         blocks = db.blockchain.find()
-        
+
         for block in blocks:
             temp = Block(index = block['index'], transactions = block['transactions'], timestamp = block['timestamp'], previous_hash = block['previous_hash'], nonce = block['nonce'])
             temp.hash = block['hash']
@@ -272,7 +271,7 @@ def register_with_existing_node():
         # update chain and the peers
         chain_dump = response.json()['chain']
         blockchain = create_chain_from_dump(chain_dump)
-        peers.update(response.json()['peers'])
+        # peers.update(response.json()['peers'])
         return "Registration successful", 200
     else:
         # if something goes wrong, pass it on to the API response
@@ -354,7 +353,10 @@ def announce_new_block(block):
     Other blocks can simply verify the proof of work and add it to their
     respective chains.
     """
+    # host = request.host_url.replace("localhost", "127.0.0.1")
     for peer in peers:
+        # if host == peer:
+        #     continue
         url = "{}add_block".format(peer)
         headers = {'Content-Type': "application/json"}
         requests.post(url,

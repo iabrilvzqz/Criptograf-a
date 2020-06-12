@@ -101,7 +101,7 @@ def postShopping():
 @login_required
 def post_read():
     fetch_posts()
-    
+
     if current_user.is_admin:
         return render_template('admin/post_read.html', title = 'Ventas realizadas', posts = posts, node_address=CONNECTED_NODE_ADDRESS, readable_time=timestamp_to_string)
 
@@ -203,5 +203,21 @@ def load_user(user_id):
 def timestamp_to_string(epoch_time):
     return datetime.datetime.fromtimestamp(epoch_time).strftime('%a, %B %d, %Y %H:%M')
 
+@app.route('/defServer', methods=['POST'])
+def defServer():
+    global CONNECTED_NODE_ADDRESS
+    content = request.get_json()
+    if "server" not in content:
+        return "Error", 400
+    CONNECTED_NODE_ADDRESS = content["server"]
+    print(CONNECTED_NODE_ADDRESS)
+    return "Success", 200
+
+
+@app.route('/getServer', methods=['GET'])
+def getServer():
+    return jsonify({
+        "server":CONNECTED_NODE_ADDRESS
+    })
 
 app.run(debug=True)
