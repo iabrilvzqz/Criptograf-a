@@ -35,7 +35,7 @@ En caso de que no lo esté inicielo con:
 $ sudo service mongodb start
 ```
 
-### Ejecución
+## Ejecución
 
 Para iniciar un nodo del servidor Blockchain
 En un terminal ejecute:
@@ -51,7 +51,7 @@ $ export FLASK_APP=run.py # Para Windows cambie export por set
 $ flask run
 ```
 
-La palicación se ejecutará en [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
+La aplicación se ejecutará en [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
 
 Interfaz de usuario
 
@@ -87,3 +87,48 @@ Interfaz de usuario
 
 4. Registro de ventas: el administrador puede visualizar el registro de ventas, en el que se listan todas las transacciones que se han realizado.
 ![image.png](screenshots/read.png)
+
+
+### Ejecución con varios nodos
+
+Para ejecutar el proyecto con varios nodos puede realizar lo siguiente (ejemplo para dos nodos):
+
+```sh
+# Creación de dos nodos blockchain
+$ export FLASK_APP=node_ser.py # Para Windows cambie export por set
+$ flask run --port 8000 &
+$ flask run --port 8001 &
+```
+En un terminal diferente ejecute:
+```sh
+# Para diferentes servidores web
+$ export FLASK_APP=run.py # Para Windows cambie export por set
+$ flask run &
+$ flask run --host 127.0.0.2 &
+```
+Ahora tiene dos entornos de la aplicación ejecutandose en [http://127.0.0.1:5000/](http://127.0.0.1:5000/) y [http://127.0.0.2:5000/](http://127.0.0.1:5000/) aunque ambas corriendo con el nodo de blockchain en el puerto 8000
+
+Para cambiar el node_server de alguna de las ejecuciones realice:
+```sh
+$ curl -X POST \
+    http://127.0.0.2:5000/defServer \
+    -H 'Content-Type: application/json' \
+    -d '{"server": "http://127.0.0.1:8001" }'
+```
+
+Ahora tendrá dos nodos del blockchain, cada uno con una interfaz propia. Sin embargo para comunicar ambos nodos es necesario que cada nodo se registre con el otro u otros
+```sh
+# Para registrar al nodo que corre en el puerto 8000 con el que corre en el puerto 8001
+$ curl -X POST \
+  http://127.0.0.1:8000/register_with \
+  -H 'Content-Type: application/json' \
+  -d '{"node_address": "http://127.0.0.1:8001"}'
+```
+
+```sh
+# Para registrar al nodo que corre en el puerto 8001 con el que corre en el puerto 8000
+$ curl -X POST \
+  http://127.0.0.1:8001/register_with \
+  -H 'Content-Type: application/json' \
+  -d '{"node_address": "http://127.0.0.1:8000"}'
+```
